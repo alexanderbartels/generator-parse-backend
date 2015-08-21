@@ -1,11 +1,13 @@
 ## Install
 
-In order to run this genrator you need to install yeoman.
+In order to run this genrator you need to install yeoman. 
+If you don't know what yeoman is, head over to [http://yeoman.io/](http://yeoman.io/).
 ```
 $ npm install -g yo
 ```
 
-After that, you can install the genrator-parse-backend.
+If yo is installed successful, you can start installing generators.
+Install the genrator-parse-backend:
 ```
 $ npm install -g generator-parse-backend
 ```
