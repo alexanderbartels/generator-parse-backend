@@ -4,7 +4,9 @@
   "description": "create backend migration scripts for the parse.com BaaS. Inspired by rails ActiveRecors Migrations",
   "main": "index.js",
   "scripts": {
-    "test": "mocha -u bdd -R spec --recursive ./test"
+    "test": "npm run compile && mocha -u bdd -R spec --recursive ./test",
+    "compile": "babel -d lib/ src/",
+    "prepublish": "npm run compile"
   },
   "repository": {
     "type": "git",
@@ -16,13 +18,14 @@
     "activerecord",
     "migration"
   ],
-  "author": "Alexander Bartels <bartels.xander@gmail.com> (http://www.alexanderbartels.com)",
+  "author": "Alexander Bartels (http://www.alexanderbartels.com)",
   "license": "MIT License",
   "bugs": {
     "url": "https://github.com/alexanderbartels/generator-parse-backend/issues"
   },
   "homepage": "https://github.com/alexanderbartels/generator-parse-backend",
   "devDependencies": {
+    "babel": "^5.8.21",
     "chai": "^3.2.0",
     "mocha": "^2.2.5"
   }
