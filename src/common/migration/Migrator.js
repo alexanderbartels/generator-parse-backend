@@ -1,5 +1,5 @@
 
-import MigrationTemplate from './MigrationTemplate';
+import MigrationFactory from './MigrationFactory';
 
 export default class Migrator {
 
@@ -39,14 +39,14 @@ export default class Migrator {
 
   _readUpMigrations(files) {
     let migrations = new Migrations();
-    files.forEach(f => migrations.add(MigrationTemplate.parseUp(f)));
+    files.forEach(f => migrations.add(MigrationFactory.parseUp(f)));
 
     return migrations;
   }
 
   _readDownMigrations(files) {
     let migrations = new Migrations();
-    files.forEach(f => migrations.add(MigrationTemplate.parseDown(f)));
+    files.forEach(f => migrations.add(MigrationFactory.parseDown(f)));
 
     return migrations;
   }
