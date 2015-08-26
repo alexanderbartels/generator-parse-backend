@@ -66,7 +66,7 @@ export default class Migrator {
     let targetIndex = this._findIndex(migrationFiles, targetVersion);
 
     // return only the migration files between the current (excluding) and target (including) version
-    return _.slice(migrationFiles, startIndex, (targetIndex + 1));
+    return this._addFileExt(_.slice(migrationFiles, startIndex, (targetIndex + 1)), '.js');
   }
 
   _findIndex(files, version) {
@@ -89,6 +89,18 @@ export default class Migrator {
     var names = []
     files.forEach(f => names.push(this._basename(f, ext)));
     return names;
+  }
+
+  /**
+   * @param names array with file names (excluding file extension)
+   * @param ext the extension to add to the given file names
+   *
+   * @return array with file names (with appended extension)
+   */
+  _addFileExt(names, ext) {
+    var files = []
+    names.forEach(n => files.push(n + ext));
+    return files;
   }
 
   _resolveTargetVersion(files, targetVersion) {
@@ -114,7 +126,7 @@ export default class Migrator {
   }
 
   _execute(migrations) {
-    migrations.execute();
+    migrations.execute(this.parseApp);
   }
 
   _handleError(err) {

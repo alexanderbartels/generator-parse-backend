@@ -5,6 +5,7 @@ var should = require('chai').should();
 
 /** include domain specific stuff **/
 var Migrator = require("../../../lib/common/migration/Migrator");
+var Migrations = require("../../../lib/common/migration/Migrations");
 var MigrationFactory = require("../../../lib/common/migration/MigrationFactory");
 var ParseApp = require("../../../lib/common/parse/ParseApp");
 
@@ -27,11 +28,39 @@ describe('Migrator', function () {
   });
 
   describe('#_readUpMigrations()', function () {
-    // TODO
+    it('should let parse all files from the migration factory and add it to the Migrations Object', function () {
+      // given
+      // mock migrationFactory#files()
+      var migrationFactory = new MigrationFactory("migrationDir");
+      migrationFactory.parseUp = function (file) { return file + '#parseUp'; };
+      var migrator = new Migrator(parseApp, migrationFactory, undefined, false);
+      var files = ['1_file.js', '2_file.js'];
+
+      // when
+      var result = migrator._readUpMigrations(files);
+
+      // then
+      expect(result).to.be.instanceof(Migrations);
+      expect(result.migrations).to.be.deep.equal(['1_file.js#parseUp', '2_file.js#parseUp']);
+    });
   });
 
   describe('#_readDownMigrations()', function () {
-    // TODO
+    it('should let parse all files from the migration factory and add it to the Migrations Object', function () {
+      // given
+      // mock migrationFactory#files()
+      var migrationFactory = new MigrationFactory("migrationDir");
+      migrationFactory.parseUp = function (file) { return file + '#parseDown'; };
+      var migrator = new Migrator(parseApp, migrationFactory, undefined, false);
+      var files = ['1_file.js', '2_file.js'];
+
+      // when
+      var result = migrator._readUpMigrations(files);
+
+      // then
+      expect(result).to.be.instanceof(Migrations);
+      expect(result.migrations).to.be.deep.equal(['1_file.js#parseDown', '2_file.js#parseDown']);
+    });
   });
 
   describe('#_getMigrationFiles()', function () {
@@ -48,7 +77,7 @@ describe('Migrator', function () {
       var result = migrator._getMigrationFiles(currentVersion, targetVersion);
 
       // then
-      expect(result).to.be.deep.equal(['2_file', '3_file']);
+      expect(result).to.be.deep.equal(['2_file.js', '3_file.js']);
     });
 
     it('should return an array with all versions from the start up to the target version if no current version is specified', function () {
@@ -64,7 +93,7 @@ describe('Migrator', function () {
       var result = migrator._getMigrationFiles(currentVersion, targetVersion);
 
       // then
-      expect(result).to.be.deep.equal(['1_file', '2_file', '3_file']);
+      expect(result).to.be.deep.equal(['1_file.js', '2_file.js', '3_file.js']);
     });
   });
 
@@ -205,6 +234,22 @@ describe('Migrator', function () {
       // then
       expect(result).to.be.instanceof(Array);
       expect(result).to.be.deep.equal(['filename', 'anotherFileName.html']);
+    });
+  });
+
+  describe('#_addFileExt()', function ()  {
+    it('should append the given extension to all file names in the given array', function () {
+      // given
+      var migrator = new Migrator(parseApp, migrationFactory, undefined, false);
+      var files = ['filename', 'anotherFileName'];
+      var fileExtension = '.js';
+
+      // when
+      var result = migrator._addFileExt(files, fileExtension);
+
+      // then
+      expect(result).to.be.instanceof(Array);
+      expect(result).to.be.deep.equal(['filename.js', 'anotherFileName.js']);
     });
   });
 });
