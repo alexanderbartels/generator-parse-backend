@@ -113,12 +113,18 @@ export default class Migrator {
     return targetVersion;
   }
 
+  /**
+   * @throws Error if an incompatible migration file will be detected
+   */
   _readUpMigrations(files) {
     let migrations = new Migrations();
     files.forEach(f => migrations.add(this.migrationFactory.parseUp(f)));
     return migrations;
   }
 
+  /**
+   * @throws Error if an incompatible migration file will be detected
+   */
   _readDownMigrations(files) {
     let migrations = new Migrations();
     files.forEach(f => migrations.add(this.migrationFactory.parseDown(f)));
